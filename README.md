@@ -76,4 +76,93 @@ https://www.linkedin.com/in/rahul1n/
 https://www.linkedin.com/posts/rahul1n_kafka-is-complicated-until-you-go-through-activity-7289849070821560321-Ah_T?utm_source=share&utm_medium=member_desktop
 
 
+*****
+Apache Kafka is a must-know for data engineering system design interviews. Learn Kafka's essentials in under 5 minutes 👇 
+
+1. Topics 
+
+> Logical grouping of events. 
+
+- Topics group events in Kafka. 
+- Producers push data to topics; consumers read from them. 
+- Topics are configurable with retention policies and replication factors. 
+Tip: Configure topics to balance retention needs and fault tolerance. 
+
+2. Producers & Consumers 
+
+> Producers send messages to topics; consumers read from them. 
+
+- Producers write data; consumers process it. 
+- Consumer groups coordinate multiple consumers to scale processing. 
+- Topics are typically secured with ACLs/authentication. 
+Example: Producers write clickstream data; consumer groups process it for real-time analytics. 
+
+3. Partitions 
+
+> A topic is split into partitions for scalability. 
+
+- Kafka uses keys (hash-based) or round-robin to assign messages to partitions. 
+- Custom partitioners can control event placement. 
+Tip: More partitions = better scalability. Use keys to ensure strict ordering within a partition. 
+
+4. Event Order 
+
+> Kafka guarantees order within partitions, not across them.
+
+- Use a key to send related events to the same partition. 
+Example: Refund system ensures all events for the same order are processed in order. 
+
+5. Log Compaction 
+
+> Keep the latest event for each key. 
+
+- Retains only the latest value for each key while removing older ones. 
+- Compaction is done at the segment level. 
+Use Cases: State tracking like user profiles or inventory levels. 
+
+6. Acknowledgements 
+
+> Ensure reliability with acknowledgements. 
+
+- Producers: 
+ - `acks=0`: No ack (fast, unreliable). 
+ - `acks=1`: Leader ack (balanced). 
+ - `acks=all`: Full ack (highest reliability). 
+- Consumers: 
+ - Auto-Commit: Offsets are committed automatically. 
+ - Manual Commit: Commit offsets after successful processing. 
+Tip: Use `acks=all` + manual commits for "at-least-once" guarantees. 
+
+7. Brokers 
+
+> Kafka servers that store data and serve clients. 
+
+- Brokers store topic partitions. 
+- Each partition has a leader broker (handles writes) and followers (replicas for fault tolerance). 
+Tip: Monitor broker performance to avoid uneven load. 
+
+8. Connectors 
+
+> Use Kafka Connect to integrate with external systems. 
+
+- Source Connectors: Pull data into Kafka (e.g., from MySQL). 
+- Sink Connectors: Push Kafka data to external systems (e.g., Snowflake). 
+- Single Message Transforms (SMTs): Modify data during ingestion or ejection. 
+Use Cases: ETL pipelines, real-time replication, cloud integration. 
+
+9. Data Retention Period 
+
+> Determines how long messages are stored. 
+
+- Time-Based Retention: Keep data for a duration (e.g., 7 days). 
+- Size-Based Retention: Retain data until a partition reaches a size limit. 
+- Log Compaction: Keep only the latest value for each key. 
+
+What else should we cover? Let me know in the comments! 
+
+
+https://www.linkedin.com/in/josephmachado1991/
+
+https://www.linkedin.com/posts/josephmachado1991_data-kafka-dataengineering-activity-7292899808422342659-Y47k?utm_source=share&utm_medium=member_desktop
+
 
