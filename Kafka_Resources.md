@@ -68,3 +68,28 @@ Kafka interview questions
 𝗦𝘂𝗯𝘀𝗰𝗿𝗶𝗯𝗲 𝘁𝗼 𝗺𝘆 𝘆𝗼𝘂𝘁𝘂𝗯𝗲 𝗰𝗵𝗮𝗻𝗻𝗲𝗹 𝗵𝗲𝗿𝗲 - https://lnkd.in/dCyr4aph
 
 https://www.linkedin.com/posts/shubhamwadekar_kafka-interview-questions-%F0%9D%97%A3%F0%9D%97%9B%F0%9D%97%94%F0%9D%97%A6%F0%9D%97%98-%F0%9D%9F%AD-activity-7314653149674229760-v2Le?utm_source=share&utm_medium=member_desktop&rcm=ACoAAARSzbgBGEbWHnTkxyPnkFaeZcnK-pW0lqg
+
+***************
+
+🚀 Kafka vs RabbitMQ — Two Messaging Giants, Two Very Different Purposes
+Choosing the right messaging system isn’t about popularity — it’s about understanding how your data flows.
+🔵 Kafka → Think of it as a high-speed highway loop.
+ It’s built for:
+ • Continuous event streams
+ • High throughput
+ • Long-term data retention
+ • Real-time processing
+ • Publish–subscribe models
+🟢 RabbitMQ → More like a structured mailroom.
+ It excels at:
+ • Reliable message delivery
+ • Task & worker queues
+ • Flexible routing
+ • Point-to-point communication
+🎯 Bottom line:
+ Use Kafka when you need streaming at scale.
+ Use RabbitMQ when you need guaranteed delivery and job-based messaging.
+Making the right choice can drastically improve the performance and reliability of your distributed systems.
+
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/f86bce96-7e8b-4d55-8b7e-d03937a6d87b" />
+
