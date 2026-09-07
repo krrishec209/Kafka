@@ -93,3 +93,60 @@ Making the right choice can drastically improve the performance and reliability 
 
 <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/f86bce96-7e8b-4d55-8b7e-d03937a6d87b" />
 
+********************************
+
+Kafka is mandatory for any Backend / Java / Microservices interview. This one sheet covers 90% of what they ask.
+
+Here are the 10 questions that decide if you get selected or rejected:
+
+*1. Kafka Architecture*
+Producer → Kafka Cluster [Broker 1,2,3] → Consumer Group. Zookeeper/KRaft manages metadata.
+
+*2. acks=0, acks=1, acks=all?*
+- acks=0: No ack, fastest but data loss possible
+- acks=1: Leader ack only
+- acks=all: All ISR ack. Safest but slowest
+
+*3. How to prevent duplicate payment processing?*
+My go-to answer in interviews:
+- Enable idempotent producer `enable.idempotence=true`
+- Store processed message IDs in DB (idempotency key)
+- Use Kafka Transactions + Exactly-Once
+
+*4. What if 6 partitions and 8 consumers in one group?*
+Only 6 will be active. 2 will be idle. Max active consumers = number of partitions.
+
+*5. How to maintain ordering for same Order ID?*
+Use Order ID as message key. All events for same key go to same partition. Ordering is guaranteed WITHIN a partition only.
+
+*6. What is Dead Letter Topic (DLT)?*
+When message fails after all retries, send it to DLT for manual inspection. Never lose the message.
+
+*7. At-Most-Once vs At-Least-Once vs Exactly-Once?*
+- At-Most-Once: `acks=0` + auto commit → May lose, never duplicate
+- At-Least-Once: `acks=all` + auto commit → Never lose, may duplicate
+- Exactly-Once: Idempotent + Transactions + manual commit → Never lose, never duplicate
+
+*8. Consumer Lag?*
+Difference between latest offset and consumer's committed offset. Monitor via Kafka UI, Grafana, or `kafka-consumer-groups.sh`
+
+*9. Kafka vs RabbitMQ?*
+Kafka = Log-based, High Throughput, Streaming, Per Partition Ordering
+RabbitMQ = Queue-based, Moderate Throughput, Task Queue, Per Queue Ordering
+
+*10. Real Design: Order → Payment → Inventory*
+Order Service → `order-topic` → Payment Service → `payment-topic` → Inventory Service. Each service consumes and produces events. Async, scalable, fault-tolerant.
+
+*Bonus - How to create Producer in Spring Boot?*
+Just configure `ProducerFactory<String, Order>` with Bootstrap servers and JsonSerializer. Consumer? Just `@KafkaListener(topics="order-topic")`
+
+This cheat sheet has 50 Q&A. If you learn this, you can crack Kafka in any FAANG / Product interview.
+
+I’ve saved this as my pre-interview revision note.
+
+
+<img width="800" height="1209" alt="image" src="https://github.com/user-attachments/assets/a10f87dd-5f69-43b7-82e1-e8aaf04bff36" />
+
+
+https://lnkd.in/p/gjV6-p8N
+
