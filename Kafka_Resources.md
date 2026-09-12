@@ -150,3 +150,80 @@ I’ve saved this as my pre-interview revision note.
 
 https://lnkd.in/p/gjV6-p8N
 
+**************
+
+I used to think Kafka is complex. It's not. It's just 3 concepts + Java code.
+
+*1. WHAT IS KAFKA?*
+A distributed event streaming platform. Not a queue. It's a log.
+
+Think: Your microservices don't call each other directly. They publish events to Kafka. Whoever needs it, consumes it.
+
+Order Service → `Order Placed Event` → Kafka → Payment Service, Inventory Service, Notification Service all consume independently.
+
+*2. THE 5 CORE CONCEPTS YOU MUST KNOW*
+
+- *Producer*: Sends messages
+- *Topic*: A category/feed name (e.g., `order-topic`)
+- *Partition*: Topic is split into partitions. This gives scalability + parallelism
+- *Broker*: Kafka server that stores data
+- *Consumer Group*: Group of consumers. Each partition is consumed by only ONE consumer in a group.
+
+*Key Rule: Ordering is guaranteed only WITHIN a partition.* Want all events for same Order ID in order? Use Order ID as key.
+
+*3. KAFKA WITH JAVA / SPRING BOOT - THE ACTUAL CODE*
+
+*Producer Config:*
+@Bean
+public ProducerFactory<String, Order> producerFactory() {
+    Map<String, Object> config = new HashMap<>();
+    config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+    // For Exactly-Once
+    config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+    return new DefaultKafkaProducerFactory<>(config);
+}
+
+@Bean
+public KafkaTemplate<String, Order> kafkaTemplate() {
+    return new KafkaTemplate<>(producerFactory());
+}
+
+// Sending
+kafkaTemplate.send("order-topic", order.getId(), order);
+*Consumer Config:*
+@KafkaListener(topics = "order-topic", groupId = "order-group")
+public void listen(Order order, Acknowledgment ack) {
+    // process payment
+    paymentService.process(order);
+    ack.acknowledge(); // Manual commit - More reliable
+}
+*4. THE INTERVIEW KILLER QUESTIONS*
+
+*`acks=all` vs `acks=1` vs `acks=0`?*
+- `0` = Fastest, may lose data
+- `1` = Leader ack only
+- `all` = All ISR replicas ack. Safest.
+
+*How to handle duplicates?*
+Idempotent Producer + Store message ID in DB as idempotency key.
+
+*What if 6 partitions, 8 consumers?*
+Only 6 consumers will be active. 2 will be idle. Max parallelism = partitions.
+
+*How to scale consumers for high traffic?*
+Increase partitions + Increase consumers in group. Or add new consumer groups.
+
+*5. WHEN TO USE KAFKA?*
+Don't use Kafka for everything.
+Use REST API for sync request/response.
+Use Kafka for async, high-throughput, streaming, event-driven systems.
+
+*Real Flow I use in production:*
+Order Service → publishes to `order-topic` → Payment Service consumes → publishes to `payment-topic` → Inventory Service consumes and updates stock.
+
+Async, fault-tolerant, scalable.
+
+https://lnkd.in/p/gefgBygu
+
